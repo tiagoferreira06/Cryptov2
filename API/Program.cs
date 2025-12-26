@@ -17,8 +17,14 @@ builder.Services.AddSingleton<DbConnectionFactory>();
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 // Data Service
-builder.Services.AddHttpClient<DataServiceClient>();
+builder.Services.AddHttpClient<DataServiceClient>(client =>
+{
+    // Adicionar API Key ao header de todas as requisições ao DataService
+    var apiKey = builder.Configuration["DataService:ApiKey"] ?? "crypto-platform-secure-key-2024";
+    client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
+});
 
 // Services
 builder.Services.AddScoped<IJwtService, JwtService>();

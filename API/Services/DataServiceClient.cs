@@ -288,10 +288,17 @@ public class DataServiceClient
 
     private List<string> ParseWatchlistXml(string xml)
     {
-        var doc = XDocument.Parse(xml);
-        return doc.Descendants("string")
-            .Select(s => s.Value)
-            .ToList();
+        try
+        {
+            var doc = XDocument.Parse(xml);
+            return doc.Descendants("string")
+                .Select(s => s.Value)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Erro ao fazer parse do XML de watchlist: {ex.Message}", ex);
+        }
     }
 
     private List<DataTransactionItem> ParseTransactionsXml(string xml)

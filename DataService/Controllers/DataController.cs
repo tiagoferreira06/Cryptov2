@@ -48,6 +48,16 @@ public class DataController : ControllerBase
     [HttpPost("portfolio")]
     public async Task<IActionResult> CreatePortfolio([FromBody] CreatePortfolioRequest request)
     {
+        // Validações
+        if (request.UserId == Guid.Empty)
+            return BadRequest("UserId inválido");
+
+        if (string.IsNullOrWhiteSpace(request.CryptoId))
+            return BadRequest("CryptoId é obrigatório");
+
+        if (request.Quantity < 0)
+            return BadRequest("Quantity não pode ser negativa");
+
         var portfolio = new Portfolio
         {
             Id = Guid.NewGuid(),
@@ -63,6 +73,13 @@ public class DataController : ControllerBase
     [HttpPut("portfolio/{portfolioId}")]
     public async Task<IActionResult> UpdatePortfolio(Guid portfolioId, [FromBody] decimal newQuantity)
     {
+        // Validações
+        if (portfolioId == Guid.Empty)
+            return BadRequest("PortfolioId inválido");
+
+        if (newQuantity < 0)
+            return BadRequest("Quantity não pode ser negativa");
+
         await _portfolioRepo.UpdateQuantityAsync(portfolioId, newQuantity);
         return Ok();
     }
@@ -86,6 +103,13 @@ public class DataController : ControllerBase
     [HttpPost("watchlist")]
     public async Task<IActionResult> AddToWatchlist([FromBody] WatchlistRequest request)
     {
+        // Validações
+        if (request.UserId == Guid.Empty)
+            return BadRequest("UserId inválido");
+
+        if (string.IsNullOrWhiteSpace(request.CryptoId))
+            return BadRequest("CryptoId é obrigatório");
+
         await _watchlistRepo.AddAsync(request.UserId, request.CryptoId);
         return Ok();
     }
@@ -93,6 +117,13 @@ public class DataController : ControllerBase
     [HttpDelete("watchlist")]
     public async Task<IActionResult> RemoveFromWatchlist([FromBody] WatchlistRequest request)
     {
+        // Validações
+        if (request.UserId == Guid.Empty)
+            return BadRequest("UserId inválido");
+
+        if (string.IsNullOrWhiteSpace(request.CryptoId))
+            return BadRequest("CryptoId é obrigatório");
+
         await _watchlistRepo.RemoveAsync(request.UserId, request.CryptoId);
         return Ok();
     }
@@ -102,6 +133,22 @@ public class DataController : ControllerBase
     [HttpPost("transaction")]
     public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionRequest request)
     {
+        // Validações
+        if (request.PortfolioId == Guid.Empty)
+            return BadRequest("PortfolioId inválido");
+
+        if (string.IsNullOrWhiteSpace(request.Type))
+            return BadRequest("Type é obrigatório");
+
+        if (request.Type != "BUY" && request.Type != "SELL")
+            return BadRequest("Type deve ser BUY ou SELL");
+
+        if (request.Quantity <= 0)
+            return BadRequest("Quantity deve ser maior que zero");
+
+        if (request.PriceEur <= 0)
+            return BadRequest("PriceEur deve ser maior que zero");
+
         var transaction = new Transaction
         {
             Id = Guid.NewGuid(),

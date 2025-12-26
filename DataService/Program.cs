@@ -48,6 +48,9 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty; // Swagger na raiz (/)
 });
 
+// API Key Middleware para segurança
+app.UseMiddleware<CryptoPlatform.DataService.Middleware.ApiKeyMiddleware>();
+
 app.UseCors("AllowAll");
 app.MapControllers();
 
