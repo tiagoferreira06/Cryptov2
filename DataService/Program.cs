@@ -26,7 +26,27 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers()
     .AddXmlSerializerFormatters(); // 👈 Suporte para XML
 
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "CryptoPlatform DataService",
+        Version = "v1",
+        Description = "Serviço de dados XML para gestão de portfolios e transações"
+    });
+});
+
 var app = builder.Build();
+
+// Habilita Swagger em todos os ambientes (desenvolvimento e produção)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DataService v1");
+    c.RoutePrefix = string.Empty; // Swagger na raiz (/)
+});
 
 app.UseCors("AllowAll");
 app.MapControllers();
