@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using CryptoPlatform.Application.DTOs;
-using CryptoPlatform.Application.Interfaces.Repositories;
 using CryptoPlatform.Application.Interfaces.Services;
+using CryptoPlatform.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,17 +9,17 @@ namespace CryptoPlatform.API.Controllers;
 
 [ApiController]
 [Route("api/watchlist")]
-[Authorize] // 👈 Protegido
+[Authorize]
 public class WatchlistController : ControllerBase
 {
-    private readonly IWatchlistRepository _watchlistRepository;
+    private readonly DataServiceClient _dataService;
     private readonly ICoinGeckoService _coinGeckoService;
 
     public WatchlistController(
-        IWatchlistRepository watchlistRepository,
+        DataServiceClient dataService,
         ICoinGeckoService coinGeckoService)
     {
-        _watchlistRepository = watchlistRepository;
+        _dataService = dataService;
         _coinGeckoService = coinGeckoService;
     }
 
@@ -33,7 +33,7 @@ public class WatchlistController : ControllerBase
     public async Task<IActionResult> Add(string cryptoId)
     {
         var userId = GetUserId();
-        await _watchlistRepository.AddAsync(userId, cryptoId);
+        await _dataService.AddToWatchlistAsync(userId, cryptoId);
         return Ok();
     }
 
@@ -41,7 +41,7 @@ public class WatchlistController : ControllerBase
     public async Task<IActionResult> Remove(string cryptoId)
     {
         var userId = GetUserId();
-        await _watchlistRepository.RemoveAsync(userId, cryptoId);
+        await _dataService.RemoveFromWatchlistAsync(userId, cryptoId);
         return NoContent();
     }
 
@@ -49,7 +49,7 @@ public class WatchlistController : ControllerBase
     public async Task<IActionResult> Get()
     {
         var userId = GetUserId();
-        var cryptoIds = await _watchlistRepository.GetCryptoIdsAsync(userId);
+        var cryptoIds = await _dataService.GetWatchlistAsync(userId);
 
         var result = new List<WatchlistItemDto>();
 

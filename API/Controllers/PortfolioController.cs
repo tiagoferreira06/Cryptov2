@@ -1,9 +1,7 @@
 ﻿using System.Security.Claims;
 using CryptoPlatform.Application.DTOs;
-using CryptoPlatform.Application.Interfaces.Repositories;
 using CryptoPlatform.Application.Interfaces.Services;
-using CryptoPlatform.Domain.Entities;
-using CryptoPlatform.Domain.Enums;
+using CryptoPlatform.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,20 +9,17 @@ namespace CryptoPlatform.API.Controllers;
 
 [ApiController]
 [Route("api/portfolio")]
-[Authorize] // 👈 Protegido
+[Authorize]
 public class PortfolioController : ControllerBase
 {
-    private readonly IPortfolioRepository _portfolioRepository;
-    private readonly ITransactionRepository _transactionRepository;
+    private readonly DataServiceClient _dataService;
     private readonly ICoinGeckoService _coinGeckoService;
 
     public PortfolioController(
-        IPortfolioRepository portfolioRepository,
-        ITransactionRepository transactionRepository,
+        DataServiceClient dataService,
         ICoinGeckoService coinGeckoService)
     {
-        _portfolioRepository = portfolioRepository;
-        _transactionRepository = transactionRepository;
+        _dataService = dataService;
         _coinGeckoService = coinGeckoService;
     }
 
@@ -48,20 +43,23 @@ public class PortfolioController : ControllerBase
         if (request.PriceEur <= 0)
             return BadRequest("Price must be positive");
 
-        var portfolio = await _portfolioRepository.GetByUserAndCryptoAsync(userId, request.CryptoId);
+        // Buscar portfolio via DataService
+        var portfolio = await _dataService.GetPortfolioItemAsync(userId, request.CryptoId);
 
         if (portfolio == null)
         {
-            portfolio = new Portfolio
+            // Criar novo portfolio
+            var newPortfolioId = await _dataService.CreatePortfolioAsync(userId, request.CryptoId, 0);
+            portfolio = new DataPortfolioItem
             {
-                Id = Guid.NewGuid(),
+                Id = newPortfolioId,
                 UserId = userId,
                 CryptoId = request.CryptoId,
                 Quantity = 0
             };
-            await _portfolioRepository.CreateAsync(portfolio);
         }
 
+        // Calcular nova quantidade
         var newQuantity = request.Type == "BUY"
             ? portfolio.Quantity + request.Quantity
             : portfolio.Quantity - request.Quantity;
@@ -69,26 +67,23 @@ public class PortfolioController : ControllerBase
         if (newQuantity < 0)
             return BadRequest("Insufficient quantity to sell");
 
+        // Atualizar quantidade
         if (newQuantity == 0)
         {
-            await _portfolioRepository.DeleteAsync(portfolio.Id);
+            await _dataService.DeletePortfolioAsync(portfolio.Id);
         }
         else
         {
-            await _portfolioRepository.UpdateQuantityAsync(portfolio.Id, newQuantity);
+            await _dataService.UpdatePortfolioQuantityAsync(portfolio.Id, newQuantity);
         }
 
-        var transaction = new Transaction
-        {
-            Id = Guid.NewGuid(),
-            PortfolioId = portfolio.Id,
-            Type = Enum.Parse<TransactionType>(request.Type),
-            Quantity = request.Quantity,
-            PriceEur = request.PriceEur,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        await _transactionRepository.CreateAsync(transaction);
+        // Registar transação
+        await _dataService.CreateTransactionAsync(
+            portfolio.Id,
+            request.Type,
+            request.Quantity,
+            request.PriceEur
+        );
 
         return Ok(new { message = "Transaction added successfully" });
     }
@@ -97,7 +92,7 @@ public class PortfolioController : ControllerBase
     public async Task<IActionResult> GetPortfolio()
     {
         var userId = GetUserId();
-        var portfolios = await _portfolioRepository.GetByUserAsync(userId);
+        var portfolios = await _dataService.GetPortfolioAsync(userId);
 
         var result = new List<PortfolioItemDto>();
 
@@ -122,17 +117,17 @@ public class PortfolioController : ControllerBase
     public async Task<IActionResult> GetTransactions(string cryptoId)
     {
         var userId = GetUserId();
-        var portfolio = await _portfolioRepository.GetByUserAndCryptoAsync(userId, cryptoId);
+        var portfolio = await _dataService.GetPortfolioItemAsync(userId, cryptoId);
 
         if (portfolio == null)
             return NotFound("Portfolio not found for this crypto");
 
-        var transactions = await _transactionRepository.GetByPortfolioAsync(portfolio.Id);
+        var transactions = await _dataService.GetTransactionsAsync(portfolio.Id);
 
         var result = transactions.Select(t => new TransactionDto
         {
             Id = t.Id,
-            Type = t.Type.ToString(),
+            Type = t.Type,
             Quantity = t.Quantity,
             PriceEur = t.PriceEur,
             CreatedAt = t.CreatedAt

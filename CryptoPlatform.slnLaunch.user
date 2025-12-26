@@ -7,7 +7,7 @@
         "Action": "Start"
       },
       {
-        "Path": "SoapService\\SoapService.csproj",
+        "Path": "DataService\\DataService.csproj",
         "Action": "Start"
       }
     ]

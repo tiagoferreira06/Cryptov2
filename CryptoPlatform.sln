@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{B43353B3-5DD2-4CFD-8109-6713BA07915F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoapService", "SoapService\SoapService.csproj", "{F81E4D28-1578-4104-8493-3BF22F46DAED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\DataService.csproj", "{FAFEB452-547B-4171-8FF4-03743D267D81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{B43353B3-5DD2-4CFD-8109-6713BA07915F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B43353B3-5DD2-4CFD-8109-6713BA07915F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B43353B3-5DD2-4CFD-8109-6713BA07915F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F81E4D28-1578-4104-8493-3BF22F46DAED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F81E4D28-1578-4104-8493-3BF22F46DAED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F81E4D28-1578-4104-8493-3BF22F46DAED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F81E4D28-1578-4104-8493-3BF22F46DAED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAFEB452-547B-4171-8FF4-03743D267D81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAFEB452-547B-4171-8FF4-03743D267D81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAFEB452-547B-4171-8FF4-03743D267D81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAFEB452-547B-4171-8FF4-03743D267D81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

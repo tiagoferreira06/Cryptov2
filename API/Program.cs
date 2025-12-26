@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CryptoPlatform.API.Services;
 using CryptoPlatform.Application.Interfaces.Repositories;
 using CryptoPlatform.Application.Interfaces.Services;
 using CryptoPlatform.Infrastructure.Data;
@@ -16,9 +17,8 @@ builder.Services.AddSingleton<DbConnectionFactory>();
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IWatchlistRepository, WatchlistRepository>();
-builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
-builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+// Data Service
+builder.Services.AddHttpClient<DataServiceClient>();
 
 // Services
 builder.Services.AddScoped<IJwtService, JwtService>();
@@ -108,6 +108,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
 
 
 var app = builder.Build();

@@ -1,0 +1,172 @@
+[
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "CreatePortfolio",
+    "RelativePath": "data/portfolio",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CryptoPlatform.DataService.Controllers.CreatePortfolioRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "UpdatePortfolio",
+    "RelativePath": "data/portfolio/{portfolioId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "portfolioId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "newQuantity",
+        "Type": "System.Decimal",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "DeletePortfolio",
+    "RelativePath": "data/portfolio/{portfolioId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "portfolioId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "GetPortfolio",
+    "RelativePath": "data/portfolio/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "GetPortfolioItem",
+    "RelativePath": "data/portfolio/{userId}/{cryptoId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "cryptoId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "CreateTransaction",
+    "RelativePath": "data/transaction",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CryptoPlatform.DataService.Controllers.CreateTransactionRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "GetTransactions",
+    "RelativePath": "data/transaction/{portfolioId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "portfolioId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "AddToWatchlist",
+    "RelativePath": "data/watchlist",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CryptoPlatform.DataService.Controllers.WatchlistRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "RemoveFromWatchlist",
+    "RelativePath": "data/watchlist",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CryptoPlatform.DataService.Controllers.WatchlistRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CryptoPlatform.DataService.Controllers.DataController",
+    "Method": "GetWatchlist",
+    "RelativePath": "data/watchlist/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
